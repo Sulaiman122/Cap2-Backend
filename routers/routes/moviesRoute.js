@@ -1,11 +1,12 @@
 const express = require("express");
 const {
   getAllMovies,
-  // getMovieById,
-  // getFavoriteMovie,
-  // createNewMovie,
-  // updateMovieDetails,
-  // deletemovie,
+  searchMovie,
+  register,
+  login,
+  getAllMusic,
+  addToFav,
+  getFavourite,
 } = require("../controllers/moviesController");
 
 // const getAllMoviesMiddleware = (req, res, next) => {
@@ -17,10 +18,15 @@ const movieRouter = express.Router();
 
 movieRouter.get("/", getAllMovies);
 
-// movieRouter.get("/:id", getMovieById);
+movieRouter.get("/music", getAllMusic);
 
-// movieRouter.get("/fav", getFavoriteMovie);
+movieRouter.get("/search/:term", searchMovie);
 
+movieRouter.post("/register", register);
+movieRouter.post('/login', login);
+
+movieRouter.get("/favourite", getFavourite);
+movieRouter.post('/favourite/:id/:media/:term', addToFav);
 // movieRouter.post("/", createNewMovie);
 
 // movieRouter.put("/:id", updateMovieDetails);

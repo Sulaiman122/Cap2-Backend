@@ -13,7 +13,6 @@ app.use(cors())
 
 app.use(express.json());
 
-
 // const appMiddleware = (req, res, next) => {
 //   console.log("appMiddleware");
 //   next();
