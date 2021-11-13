@@ -1,108 +1,64 @@
 const axios = require("axios");
 const fs = require("fs");
+const itunesApiSearch = require("itunes-api-search");
 
-let movies = [];
 
 console.log(process.env.PORT);
 
-const getMyAPI = async () => {
+
+const getAllMovies = async (req, res) => {
   await axios
-    .get("https://itunes.apple.com/search?term=away&media=movie&limit=50")
-    .then((data)=> {movies = data.data});
-    
-  fs.writeFile("./db/movies.json", JSON.stringify(movies), (err) => {
-    if (err) {
-      console.log(err);
-      return err;
-    }
-  });
+    .get("https://itunes.apple.com/search?term=action&media=movie")
+    .then((data) => {
+      res.status(200).json(data.data);
+    });
 };
-getMyAPI();
 
-const getAllMovies = (req, res) => {
-  
-  res.status(200).json(movies);
+const getAllAudio = async (req, res) => {
+  await axios
+    .get("https://itunes.apple.com/search?term=silence&media=music&limit=50")
+    .then((data) => {
+      res.status(200).json(data.data);
+    });
 };
-// const getMovieById = (req, res) => {
-//   const id = req.params.id;
-//   const found = movies.find((movie) => movie.id == id);
 
-//   res.status(200).json(found);
-// };
+const getAllEbooks = async (req, res) => {
+  await axios
+    .get("https://itunes.apple.com/search?term=money&media=ebook&limit=50")
+    .then((data) => {
+      res.status(200).json(data.data);
+    });
+};
 
-// const getFavoriteMovie = (req, res) => {
-//   res.status(200).json(movies.filter((movie) => movie.isFav));
-// };
+const searchMovie = (req, res) => {
+  const term = req.params.term;
+  let result = {};
+  itunesApiSearch
+    .search(
+      term,
+      {
+        limit: 50, // max 200
+        media: "movie",
+      },
+      function (err, res) {
+        if (err) {
+          res.status(400).json(err);
+          return;
+        }
+        result = res;
+      }
+    )
+    .then(() => {
+      res.status(201).json(result);
+    });
+};
 
-// const createNewMovie = (req, res) => {
-//   const movie = {
-//     id: movies.length + 1,
-//     name: req.body.name,
-//     isFav: false,
-//     isDel: false,
-//   };
-//   movies.push(movie);
 
-//   fs.writeFile("./db/movies.json", JSON.stringify(movies), (err) => {
-//     if (err) {
-//       res.status(400).json("bad request");
-//     } else {
-//       res.status(200).json(movies);
-//     }
-//   });
-// };
 
-// const updateMovieDetails = (req, res) => {
-//   const { id } = req.params;
-//   const { name, isDel, isFav } = req.body;
-//   let check = false;
-
-//   movies.forEach((movie) => {
-//     if (movie.id == id) {
-//       if (name != undefined) movie.name = name;
-//       if (isDel != undefined) movie.isDel = isDel;
-//       if (isFav != undefined) movie.isFav = isFav;
-//       check = true;
-//     }
-//   });
-
-//   if (check) {
-//     fs.writeFile("./db/movies.json", JSON.stringify(movies), (err) => {
-//       if (err) {
-//         res.status(400).json("bad request");
-//       } else {
-//         res.status(200).json(movies);
-//       }
-//     });
-//   } else {
-//     res.status(404).json("movie not found");
-//   }
-// };
-
-// const deletemovie = (req, res) => {
-//   const { id } = req.params;
-//   let check = false;
-
-//   movies.forEach((movie) => {
-//     if (movie.id == id) {
-//       movie.isDel = true;
-//       check = true;
-//     }
-//   });
-
-//   if (check) {
-//     fs.writeFile("./db/movies.json", JSON.stringify(movies), (err) => {
-//       if (err) {
-//         res.status(400).json("bad request");
-//       } else {
-//         res.status(200).json(movies);
-//       }
-//     });
-//   } else {
-//     res.status(404).json("movie not found");
-//   }
-// };
 
 module.exports = {
   getAllMovies,
+  searchMovie,
+  getAllAudio,
+  getAllEbooks,
 };

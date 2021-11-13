@@ -1,30 +1,21 @@
 const express = require("express");
 const {
   getAllMovies,
-  // getMovieById,
-  // getFavoriteMovie,
-  // createNewMovie,
-  // updateMovieDetails,
-  // deletemovie,
+  searchMovie,
+  getAllAudio,
+  getAllEbooks,
 } = require("../controllers/moviesController");
 
-// const getAllMoviesMiddleware = (req, res, next) => {
-//   console.log("get All Movies");
-//   next();
-// };
+
 
 const movieRouter = express.Router();
 
-movieRouter.get("/", getAllMovies);
+movieRouter.get("/movies", getAllMovies);
 
-// movieRouter.get("/:id", getMovieById);
+movieRouter.get("/audio", getAllAudio);
+movieRouter.get("/ebook", getAllEbooks);
 
-// movieRouter.get("/fav", getFavoriteMovie);
+movieRouter.get("/search/:term", searchMovie);
 
-// movieRouter.post("/", createNewMovie);
-
-// movieRouter.put("/:id", updateMovieDetails);
-
-// movieRouter.delete("/:id", deletemovie);
 
 module.exports = movieRouter;
