@@ -1,5 +1,7 @@
 let users = [];
 const register = (req, res) => {
+  console.log(users);
+
   if (req.body.name && req.body.email && req.body.password) {
     users.push({
       id: Date.now().toString(),
@@ -7,7 +9,6 @@ const register = (req, res) => {
       email: req.body.email,
       password: req.body.password,
     });
-    console.log(users);
     res
       .status(200)
       .json({ status: true, id: Date.now().toString(), name: req.body.name });
@@ -17,10 +18,11 @@ const register = (req, res) => {
 
 const login = (req, res) => {
     console.log(users);
-  if (users.length > 0) {
+  if (users) {
+    console.log('user length is not an issue');
     users.find((user) => {
       if (user.email == req.body.email && user.password == req.body.password) {
-        res.status(200).json({ status: true, usrName: user.name });
+        res.status(200).json({ status: true, name: user.name });
       } else {
         res
           .status(200)
@@ -30,9 +32,7 @@ const login = (req, res) => {
     });
   } else {
     res.status(200).json({ status: false, respLog: "Incorrect Email or Password" });
-    console.log(false);
   }
-  console.log(users);
 };
 
 module.exports = {
